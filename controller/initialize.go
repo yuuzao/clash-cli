@@ -2,8 +2,10 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path"
+
 )
 
 var Configfile string
@@ -17,5 +19,10 @@ func init() {
 
 	Configfile = path.Join(homeDir, ".config/clash/config.yaml")
 
-	//Todo: check if configfile doesn't exists.
+	//terminate if configfile doesn't exists.
+	if _, err := os.Stat(Configfile); os.IsNotExist(err) {
+		log.Fatal("config file does not exist, exit now...")
+	}
 }
+
+// todo: custom config path
