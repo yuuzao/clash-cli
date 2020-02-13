@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -28,7 +29,12 @@ var rootCmd = &cobra.Command{
 		ss := strings.Join(args, " ") 
 
 		if ToAdd {
-			// controller.AddRule(ss)
+			err := controller.AddRule(ss)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			color.Green("rule added")
+			return 
 		}
 
 		if ToDelete {
@@ -46,7 +52,6 @@ var rootCmd = &cobra.Command{
 		if ToSwitchNode {
 
 		}
-		
 		// handle the situation when there are no flags
 		if len(args) > 0 && args[0] != "-" {
 			color.Red("Please assign a specific flag to continue...\n")
