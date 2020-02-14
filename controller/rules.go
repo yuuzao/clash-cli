@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	// "fmt"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -9,31 +9,15 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func AddRule(rawRule string) (err error) {
+func AddRule(rawRule string) {
 	rule := parseRule(rawRule)
 
 	var conf *yamlConfig
-	err = yaml.Unmarshal(loadConfig(), &conf)
-	if err != nil {
-		fmt.Println("yaml unmarshal failed...")
-		return 
-	}
-
+	unmarshal(&conf)
 	conf.Rule = append(conf.Rule, rule)
 
-	y, err := yaml.Marshal(&conf)
-
-	if err != nil {
-		fmt.Println("yaml marshal error")
-		return
-	}
-
-	err = ioutil.WriteFile(ConfigFile, y, 0600)
-	if err != nil {
-		fmt.Println("write file error")
-		return 
-	}
-	return
+	y := marshal(&conf)
+	writeToYaml(y)
 }
 
 func parseRule(rawRule string) (r string) {
@@ -66,7 +50,19 @@ func parseRule(rawRule string) (r string) {
 }
 
 
-func DeleteRule(domain string) (isDeleted bool) {
+func DeleteRule(rawRule string) (err error) {
+	/*
+	Two formats of rawRule are supported: a standard clash rule or just a 
+	domain.
+	This function will do a search first. If there is only one matched
+	rule, it will deleted directly. But if there exist more than one rules
+	contain the domain, they will be listed as candidates and wait for the user's
+	choice.
+	*/
+	return
+}
+
+func search(rawRule string) (r string) {
 	return
 }
 
@@ -78,10 +74,6 @@ func SearchDomain(domain string) (isExisted bool) {
 	return
 }
 
-// check if the given strings can make up a valid proxy rule
-func checkFormat(rule string) (isValid bool) {
-	return
-}
 
 func sortProxy() (isSorted bool) {
 	return
@@ -94,4 +86,26 @@ func loadConfig()[]byte {
 	} 
 
 	return conf
+}
+
+func unmarshal(in interface{}){
+	err := yaml.Unmarshal(loadConfig(), in)
+	if err != nil {
+		log.Fatalf("yaml unmarshal error:\n%v", err)
+	}
+}
+
+func marshal(in interface{}) []byte {
+	y, err := yaml.Marshal(in)
+	if err != nil {
+		log.Fatalf("yaml marshal error:\n%v", err)
+	}
+	return y
+}
+
+func writeToYaml(content []byte) {
+	err := ioutil.WriteFile(ConfigFile, content, 0600)
+	if err != nil {
+		log.Fatalf("write to yaml failed:\n%v", err)
+	}
 }

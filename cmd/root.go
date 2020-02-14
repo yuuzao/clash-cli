@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -29,10 +28,7 @@ var rootCmd = &cobra.Command{
 		ss := strings.Join(args, " ") 
 
 		if ToAdd {
-			err := controller.AddRule(ss)
-			if err != nil {
-				log.Fatalln(err)
-			}
+			controller.AddRule(ss)
 			color.Green("rule added")
 			return 
 		}
@@ -54,10 +50,11 @@ var rootCmd = &cobra.Command{
 		}
 		// handle the situation when there are no flags
 		if len(args) > 0 && args[0] != "-" {
-			color.Red("Please assign a specific flag to continue...\n")
+			color.HiWhite("Please assign a valid flag to continue...\n")
 			if err := cmd.Usage(); err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				// fmt.Println(err)
+				// os.Exit(1)
+				log.Fatalln(err)
 			}
 			return
 		}
