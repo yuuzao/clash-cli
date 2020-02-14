@@ -85,7 +85,6 @@ func DeleteRule(rawRule string) {
 
 	y := marshal(&conf)
 	writeToYaml(y)
-
 }
 
 func chooseToDelete(conf *yamlConfig, result []int) []int {
@@ -158,17 +157,17 @@ func search(rule string, conf *yamlConfig) (indexes []int) {
 	return
 }
 
-func ModifyRule(rule string) (isAltered bool) {
-	return
-}
-
-func SearchDomain(domain string) (isExisted bool) {
-	return
-}
-
-
-func sortProxy() (isSorted bool) {
-	return
+func SearchDomain(domain string) {
+	var conf *yamlConfig
+	unmarshal(&conf)
+	matched := search(domain, conf)
+	if len(matched) == 0 {
+		log.Fatal("no such a domain")
+	}
+	fmt.Printf("found %d rule(s)\n", len(matched))
+	for _, v := range matched {
+		fmt.Println(conf.Rule[v])
+	}
 }
 
 func loadConfig()[]byte {

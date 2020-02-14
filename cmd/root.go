@@ -15,7 +15,6 @@ var (
 	// alter Rules ...
 	ToAdd 		bool	
 	ToDelete	bool
-	ToModify	bool
 	ToSearch	bool
 
 	//switch proxy node
@@ -39,12 +38,9 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		if ToModify {
-
-		}
-
 		if ToSearch {
-
+			controller.SearchDomain(ss)
+			return
 		}
 
 		if ToSwitchNode {
@@ -71,7 +67,6 @@ func init()  {
 	}
 	reg(&ToAdd, "add", "a", false, "add a new piece of rule")
 	reg(&ToDelete, "delete", "d", false, "delete an existed piece of rule")
-	reg(&ToModify, "modify", "m", false, "modify an existed piece of rule")
 	reg(&ToSearch, "find", "f", false, "find a specific piece of rule")
 	reg(&ToSwitchNode, "switch", "s", false, "switch to another proxy node")
 }
