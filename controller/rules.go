@@ -37,12 +37,19 @@ func AddRule(rawRule string) (err error) {
 }
 
 func parseRule(rawRule string) (r string) {
+	/*
+	check wether the input rule is valid and return a formatted string.
+	"rawRule" is basically made up by three parts: prefix, domain and adapter. Since the 
+	prefix is of uppercase and seems a little bit long, this function could handle
+	a shorthand or lowercase input of prefix such as "suffix".
+	*/
+
 	rule := strings.Split(rawRule, ",")
 	if len(rule) != 3 {
 		log.Fatal("invalid rule format")
 	}
 
-	// check whether the prefix is supproted and reassign it with the right format.  
+	// check whether the prefix is supported and reassign it with the right format.
 	prefix := strings.ToLower(rule[0])
 	switch prefix {
 		case "domain", "ip-cidr", "geoip":
