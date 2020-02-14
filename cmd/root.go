@@ -34,7 +34,9 @@ var rootCmd = &cobra.Command{
 		}
 
 		if ToDelete {
-
+			controller.DeleteRule(ss)
+			color.Green("rule deleted")
+			return
 		}
 
 		if ToModify {
