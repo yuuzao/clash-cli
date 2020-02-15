@@ -12,13 +12,14 @@ import (
 
 
 var (
-	// alter Rules ...
 	ToAdd 		bool	
 	ToDelete	bool
 	ToSearch	bool
 
-	//switch proxy node
 	ToSwitchNode bool
+	ToChangeMode bool
+	ToShowStatus bool
+
 )
 
 var rootCmd = &cobra.Command{
@@ -46,6 +47,15 @@ var rootCmd = &cobra.Command{
 		if ToSwitchNode {
 
 		}
+
+		if ToChangeMode {
+
+		}
+
+		if ToShowStatus {
+
+		}
+
 		// handle the situation when there are no flags
 		if len(args) > 0 && args[0] != "-" {
 			color.HiWhite("Please assign a valid flag to continue...\n")
@@ -68,7 +78,9 @@ func init()  {
 	reg(&ToAdd, "add", "a", false, "add a new piece of rule")
 	reg(&ToDelete, "delete", "d", false, "delete an existed piece of rule")
 	reg(&ToSearch, "find", "f", false, "find a specific piece of rule")
-	reg(&ToSwitchNode, "switch", "s", false, "switch to another proxy node")
+	reg(&ToSwitchNode, "node", "n", false, "switch to another proxy node")
+	reg(&ToChangeMode, "mode", "m", false, "change the proxy mode: GLOBAL, Rule or Direct")
+	reg(&ToShowStatus, "status", "s", false, "show the current clash status")
 }
 
 // Execute the cobra process

@@ -2,10 +2,12 @@ package controller
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
 
+	yaml "gopkg.in/yaml.v2"
 )
 
 type yamlConfig struct {
@@ -30,7 +32,10 @@ type yamlConfig struct {
 	Rule          []string                          `yaml:"Rule"`
 }
 
-var ConfigFile string
+var ConfigFile 	string
+var BaseUrl 	string
+var Conf 		*yamlConfig
+
 
 func init() {
 	homeDir, err := os.UserHomeDir()
@@ -45,6 +50,41 @@ func init() {
 	if _, err := os.Stat(ConfigFile); os.IsNotExist(err) {
 		log.Fatal("config file does not exist, exit now...")
 	}
+
+	unmarshal(&Conf)
+
+	BaseUrl = Conf.ExternalController
+
 }
 
 // todo: custom config path
+func loadConfig()[]byte {
+	conf, err := ioutil.ReadFile(ConfigFile)
+	if err != nil {
+		log.Fatalf("read config file failed: %s", err)
+	} 
+
+	return conf
+}
+
+func unmarshal(in interface{}){
+	err := yaml.Unmarshal(loadConfig(), in)
+	if err != nil {
+		log.Fatalf("yaml unmarshal error:\n%v", err)
+	}
+}
+
+func marshal(in interface{}) []byte {
+	y, err := yaml.Marshal(in)
+	if err != nil {
+		log.Fatalf("yaml marshal error:\n%v", err)
+	}
+	return y
+}
+
+func writeToYaml(content []byte) {
+	err := ioutil.WriteFile(ConfigFile, content, 0600)
+	if err != nil {
+		log.Fatalf("write to yaml failed:\n%v", err)
+	}
+}

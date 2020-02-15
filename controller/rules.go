@@ -3,23 +3,19 @@ package controller
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 
-	yaml "gopkg.in/yaml.v2"
 )
 
 func AddRule(rawRule string) {
 	rule := parseRule(rawRule)
 
-	var conf *yamlConfig
-	unmarshal(&conf)
-	conf.Rule = append(conf.Rule, rule)
+	Conf.Rule = append(Conf.Rule, rule)
 
-	y := marshal(&conf)
+	y := marshal(&Conf)
 	writeToYaml(y)
 }
 
@@ -52,7 +48,6 @@ func parseRule(rawRule string) (r string) {
 	return
 }
 
-
 func DeleteRule(rawRule string) {
 	/*
 	Two formats of rawRule are supported: a standard clash rule or just a 
@@ -62,28 +57,26 @@ func DeleteRule(rawRule string) {
 	contain the domain, they will be listed as candidates and wait for the user's
 	choice.
 	*/
-	var conf *yamlConfig
-	unmarshal(&conf)
 
 	var result []int
-	result = append(result, search(rawRule, conf)...)
+	result = append(result, search(rawRule, Conf)...)
 
 	switch len(result) {
 	case 0:
 		log.Fatal("Cannot delete a nonexistent rule...")
 	case 1:
 		i := result[0]
-		conf.Rule = append(conf.Rule[:i], conf.Rule[i+1: ]...)
+		Conf.Rule = append(Conf.Rule[:i], Conf.Rule[i+1: ]...)
 	default:
-		choices := chooseToDelete(conf, result)
+		choices := chooseToDelete(Conf, result)
 		for i, m := range choices {
 			//todo: swap back to the original order.
-			conf.Rule[m] = conf.Rule[len(conf.Rule)-i-1]
+			Conf.Rule[m] = Conf.Rule[len(Conf.Rule)-i-1]
 		}
-		conf.Rule = conf.Rule[:len(conf.Rule)-len(choices)]
+		Conf.Rule = Conf.Rule[:len(Conf.Rule)-len(choices)]
 	}
 
-	y := marshal(&conf)
+	y := marshal(&Conf)
 	writeToYaml(y)
 }
 
@@ -158,45 +151,20 @@ func search(rule string, conf *yamlConfig) (indexes []int) {
 }
 
 func SearchDomain(domain string) {
-	var conf *yamlConfig
-	unmarshal(&conf)
-	matched := search(domain, conf)
+	matched := search(domain, Conf)
 	if len(matched) == 0 {
 		log.Fatal("no such a domain")
 	}
-	fmt.Printf("found %d rule(s)\n", len(matched))
+
+
+	var s string = ""
+	if len(matched) > 1 {
+		s = "s"
+	}
+
+	fmt.Printf("found %d rule%s\n", len(matched), s)
 	for _, v := range matched {
-		fmt.Println(conf.Rule[v])
+		fmt.Println(Conf.Rule[v])
 	}
 }
 
-func loadConfig()[]byte {
-	conf, err := ioutil.ReadFile(ConfigFile)
-	if err != nil {
-		log.Fatalf("read config file failed: %s", err)
-	} 
-
-	return conf
-}
-
-func unmarshal(in interface{}){
-	err := yaml.Unmarshal(loadConfig(), in)
-	if err != nil {
-		log.Fatalf("yaml unmarshal error:\n%v", err)
-	}
-}
-
-func marshal(in interface{}) []byte {
-	y, err := yaml.Marshal(in)
-	if err != nil {
-		log.Fatalf("yaml marshal error:\n%v", err)
-	}
-	return y
-}
-
-func writeToYaml(content []byte) {
-	err := ioutil.WriteFile(ConfigFile, content, 0600)
-	if err != nil {
-		log.Fatalf("write to yaml failed:\n%v", err)
-	}
-}
