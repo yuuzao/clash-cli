@@ -29,12 +29,14 @@ var rootCmd = &cobra.Command{
 
 		if ToAdd {
 			controller.AddRule(ss)
+			controller.ReloadConfig()
 			color.Green("rule added")
 			return 
 		}
 
 		if ToDelete {
 			controller.DeleteRule(ss)
+			controller.ReloadConfig()
 			color.Green("rule deleted")
 			return
 		}
