@@ -44,7 +44,7 @@ func init() {
 		fmt.Println(homeDir)
 	}
 
-	ConfigFile = path.Join(homeDir, ".config/clash/configb.yaml")
+	ConfigFile = path.Join(homeDir, ".config/clash/config.yaml")
 
 	//terminate if configfile doesn't exists.
 	if _, err := os.Stat(ConfigFile); os.IsNotExist(err) {
@@ -53,7 +53,7 @@ func init() {
 
 	unmarshal(&Conf)
 
-	BaseUrl = Conf.ExternalController
+	BaseUrl = "http://" + Conf.ExternalController
 
 }
 
