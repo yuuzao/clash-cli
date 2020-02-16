@@ -33,8 +33,11 @@ type yamlConfig struct {
 }
 
 var ConfigFile 	string
-var BaseUrl 	string
 var Conf 		*yamlConfig
+
+var BaseUrl string
+var ConfigUrl string
+var ProxyUrl string
 
 
 func init() {
@@ -53,7 +56,9 @@ func init() {
 
 	unmarshal(&Conf)
 
-	BaseUrl = "http://" + Conf.ExternalController
+	BaseUrl := "http://" + Conf.ExternalController
+	ConfigUrl = BaseUrl + "/configs"
+	ProxyUrl = BaseUrl + "/proxies"
 
 }
 

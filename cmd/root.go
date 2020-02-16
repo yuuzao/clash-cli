@@ -47,7 +47,8 @@ var rootCmd = &cobra.Command{
 		}
 
 		if ToSwitchNode {
-
+			controller.SwitchNode("", ss)
+			return
 		}
 
 		if ToChangeMode {
@@ -55,7 +56,10 @@ var rootCmd = &cobra.Command{
 		}
 
 		if ToShowStatus {
-
+			ss := controller.ShowStatus()	
+			color.Green("current mode is %s\n", ss.Mode)
+			color.Green("proxy node is %s\n", ss.Node)
+			return
 		}
 
 		// handle the situation when there are no flags
