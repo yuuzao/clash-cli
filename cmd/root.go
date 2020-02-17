@@ -64,18 +64,10 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		// handle the situation when there are no flags
-		if len(args) > 0 && args[0] != "-" {
-			color.HiWhite("Please assign a valid flag to continue...\n")
-			if err := cmd.Usage(); err != nil {
-				// fmt.Println(err)
-				// os.Exit(1)
-				log.Fatalln(err)
-			}
-			return
+		color.HiWhite("Please assign a valid flag to continue...\n")
+		if err := cmd.Usage(); err != nil {
+			log.Fatalln(err)
 		}
-
-
 	},
 }
 
