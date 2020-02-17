@@ -23,7 +23,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "clash",
+	Use: "clash-cli",
 	Run: func (cmd *cobra.Command, args []string) {
 		ss := strings.Join(args, " ") 
 
