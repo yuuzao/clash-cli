@@ -5,7 +5,7 @@ Use command line to manage clash proxy settings.
 Windows platform is not supported yet.
 
 #### Manual
-Download for release page, then extract it to you PATH.
+Download from [release](https://github.com/Sisylocke/clash-cli/releases), then extract it to you PATH.
 
 #### Use GO
 ```
