@@ -1,0 +1,4 @@
+.goreleaser.yml
+.env
+.dist/
+.vscode/
