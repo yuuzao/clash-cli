@@ -1,12 +1,15 @@
-# clash-cli
+## clash-cli
 Use command line to manage clash proxy settings. 
-# Installation
+
+## Installation
 Windows platform is not supported yet.
-## Manual
+
+#### Manual
 Download for release page, then extract it to you PATH.
-## Use GO
+
+#### Use GO
 ```
-go get github.com/Sisylocke/clash-li
+go get github.com/Sisylocke/clash-cli
 ```
 ## Usage
 
