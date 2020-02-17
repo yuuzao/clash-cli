@@ -52,7 +52,9 @@ var rootCmd = &cobra.Command{
 		}
 
 		if ToChangeMode {
-
+			controller.ChangeMode(ss)
+			color.Green("mode changed to %s", ss)
+			return
 		}
 
 		if ToShowStatus {

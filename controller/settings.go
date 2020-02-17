@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 
@@ -21,6 +22,23 @@ func ReloadConfig() {
 	}
 
 	fmt.Println(res.Status)
+}
+
+func ChangeMode(mode string) {
+	data := map[string]string {"mode": ""}
+	switch strings.ToUpper(mode) {
+	case "GLOBAL":
+		data["mode"] = "Global"
+	case "RULE":
+		data["mode"] = "Rule"
+	case "DIRECT":
+		data["mode"] = "Direct"
+	}
+
+	res := httpReq("PATCH", ConfigUrl, data)
+	if res.StatusCode != 204 {
+		log.Fatalln(res.Status)
+	}
 }
 
 func SwitchNode(mode string, node string) {
