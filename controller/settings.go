@@ -21,7 +21,6 @@ func ReloadConfig() {
 		log.Fatalln(res.Status)
 	}
 
-	fmt.Println(res.Status)
 }
 
 func ChangeMode(mode string) {
@@ -55,7 +54,6 @@ func SwitchNode(mode string, node string) {
 	if res.StatusCode != 204 {
 		log.Fatalln(res.Status)
 	}
-	fmt.Println(res.Status)
 }
 
 func ShowStatus() CNode{

@@ -48,6 +48,7 @@ var rootCmd = &cobra.Command{
 
 		if ToSwitchNode {
 			controller.SwitchNode("", ss)
+			color.Green("node switched to %s", ss)
 			return
 		}
 
