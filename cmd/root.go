@@ -28,15 +28,21 @@ var rootCmd = &cobra.Command{
 		ss := strings.Join(args, " ") 
 
 		if ToAdd {
+			stt :=controller.ShowStatus()
+
 			controller.AddRule(ss)
+
 			controller.ReloadConfig()
+			controller.SwitchNode(stt.Mode, stt.Node)
 			color.Green("rule added")
 			return 
 		}
 
 		if ToDelete {
+			stt :=controller.ShowStatus()
 			controller.DeleteRule(ss)
 			controller.ReloadConfig()
+			controller.SwitchNode(stt.Mode, stt.Node)
 			color.Green("rule deleted")
 			return
 		}
